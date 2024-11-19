@@ -1,0 +1,13 @@
+/*REM: Disable Tailwind's base styles inside*/
+.dont-apply-tailwind * {
+    font-family: initial !important;
+    line-height: normal !important;
+    all: unset;
+    box-sizing: border-box;
+}
+
+/* 
+.no-tailwind-base * {
+    @apply text-base font-sans leading-normal;
+} 
+*/

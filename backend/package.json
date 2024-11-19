@@ -1,0 +1,36 @@
+{
+    "name": "backend",
+    "version": "0.0.1",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "ts-node --project ./tsconfig.json -r tsconfig-paths/register src/main/learn/web/backend/simple_survey_form/index.ts",
+        "build": "tsc",
+        "serve": "node -r tsconfig-paths/register build/learn/web/backend/simple_survey_form/index.js"
+    },
+    "keywords": [
+        "submit",
+        "retrieve",
+        "survey-backend"
+    ],
+    "author": "Jayo, A. R. B.",
+    "license": "ISC",
+    "description": "",
+    "dependencies": {
+        "body-parser": "^1.20.3",
+        "cors": "^2.8.5",
+        "express": "^4.21.1",
+        "mysql2": "^3.11.4",
+        "xmlbuilder": "^15.1.1"
+    },
+    "devDependencies": {
+        "@types/body-parser": "^1.19.5",
+        "@types/cors": "^2.8.17",
+        "@types/express": "^5.0.0",
+        "@types/node": "^22.9.0",
+        "dotenv": "^16.4.5",
+        "ts-node": "^10.9.2",
+        "tsconfig-paths": "^4.2.0",
+        "typescript": "^5.6.3"
+    }
+}

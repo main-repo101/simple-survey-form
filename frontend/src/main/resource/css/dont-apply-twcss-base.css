@@ -1,0 +1,18 @@
+/* custom.css */
+* {
+    font-family: unset !important;
+    line-height: unset !important;
+    margin: unset !important;
+    padding: unset !important;
+    box-sizing: border-box;
+}
+
+h1,
+h2,
+h3,
+p,
+ul,
+ol {
+    font-family: unset !important;
+    line-height: unset !important;
+}
