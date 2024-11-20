@@ -2,6 +2,7 @@ import * as MySQL from "mysql2/promise";
 import fs from "fs";
 import path from "path";
 import Path from "@learn/web/backend/simple_survey_form/constant/Path";
+import DateFormatter from "../util/DateFormatter";
 
 // import INIT_SCHEMA_DB from "@main/resource/db/init_schema.sql";
 
@@ -24,26 +25,36 @@ export default class SurveyService {
 
         //REM: Validate file existence
         if (!fs.existsSync(SCHEMA_PATH)) {
-            console.error("Schema file not found:", SCHEMA_PATH);
+            console.error(
+                "[",new DateFormatter().format("YYYY-dd-MM, hh:mm:ss x"), 
+                "] Schema file not found:", 
+                SCHEMA_PATH
+            );
             return;
         }
 
         try {
             let schema = fs.readFileSync(SCHEMA_PATH, "utf-8");
             if (!schema) {
-                throw new Error("Schema file is empty or invalid.");
+                throw new Error(
+                    "[" + new DateFormatter().format("YYYY-dd-MM, hh:mm:ss x") + "] Schema file is empty or invalid."
+                );
             }
 
             //REM: Execute the schema initialization script securely
             await this.pool.query(schema);
 
-            console.log("Database schema initialized successfully.");
-            
+            console.log(
+                "[", new DateFormatter().format("YYYY-dd-MM, hh:mm:ss x"),
+                "] Database table schema initialized successfully."
+            );
+
         } catch (error) {
-            if( error instanceof Error )
-                console.error("Error initializing database schema:", error.message);
-            else
-                console.error("An unknown Error occurred:", error);
+            console.error(
+                "[", new DateFormatter().format("YYYY-dd-MM, hh:mm:ss x"),
+                "] Error initializing database schema:",
+                (error instanceof Error) ? error.message : String(error)
+            );
         }
     }
 
@@ -51,35 +62,47 @@ export default class SurveyService {
         try {
             //REM: Efficiently check if email already exists
             let [rows] = await this.pool.query<MySQL.RowDataPacket[]>(
-                "SELECT COUNT(*) as count FROM survey_responses WHERE email = ?", 
+                "SELECT COUNT(*) as count FROM survey_responses WHERE email = ?",
                 [email]
             );
             let count: number = (rows as { count: number }[])[0]?.count || 0;
-    
+
             if (count > 0) {
                 //REM: Update existing record
                 await this.pool.query(
-                    "UPDATE survey_responses SET answer = ?, remarks = ? WHERE email = ?", 
+                    "UPDATE survey_responses SET answer = ?, remarks = ? WHERE email = ?",
                     [answer, remarks, email]
+                );
+                console.log(
+                    "[", new DateFormatter().format("YYYY:dd:MM, hh:mm:ss x"),
+                    "] Warning: Responder already exist, response updated.",
+                    "Email:", email
                 );
                 return;
             }
-    
+
             //REM: Securely insert the survey response
             await this.pool.query(
-                "INSERT INTO survey_responses (email, answer, remarks) VALUES (?, ?, ?)", 
+                "INSERT INTO survey_responses (email, answer, remarks) VALUES (?, ?, ?)",
                 [email, answer, remarks]
             );
-            
-            console.log("Success creating response.");
+
+            console.log(
+                "[", new DateFormatter().format("YYYY:dd:MM, hh:mm:ss x"),
+                "] Success creating new response.",
+                "Email:", email
+            );
+
         } catch (error) {
-            if (error instanceof Error) {
-                console.error("Error creating or updating survey response:", error.message);
-            }
+            console.error(
+                "[", new DateFormatter().format("YYYY-dd-MM, hh:mm:ss x"),
+                "] Error creating or updating survey response:",
+                (error instanceof Error) ? error.message : String(error)
+            );
             throw new Error("Failed to submit your response. Please try again later.");
         }
     }
-    
+
 
     public async getStatistics() {
         try {
@@ -88,16 +111,23 @@ export default class SurveyService {
             );
             let stats: { [key: string]: number } = {};
 
-            (rows as { answer: string; count: number }[] ).forEach((row) => {
+            (rows as { answer: string; count: number }[]).forEach((row) => {
                 stats[row.answer] = row.count;
             });
 
-            console.log("Success fetching statistics.");
+            console.log(
+                "[", new DateFormatter().format("YYYY:dd:MM, hh:mm:ss x"),
+                "] Success fetching statistics.",
+                stats
+            );
 
             return stats;
         } catch (error) {
-            if(error instanceof Error)
-                console.error("Error fetching statistics:", error.message);
+            console.error(
+                "[", new DateFormatter().format("YYYY-dd-MM, hh:mm:ss x"),
+                "] Error fetching statistics:",
+                (error instanceof Error) ? error.message : String(error)
+            );
             throw new Error("Failed to retrieve statistics. Please try again later.");
         }
     }

@@ -71,7 +71,7 @@ class SurveyStatistic extends React.Component<ISurveyStatisticProps, {}> {
         datasets: [
           {
             data: Object.values(data ?? ""),
-            backgroundColor: ["#FF6384", "#36A2EB", "#FFCE56"],
+            backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
           },
         ],
       },

@@ -55,7 +55,6 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
                     messageCode: ErrorStat.EMAIL.CODE
                 },
             }));
-            return;
         }
         else if (
             !this.validAnswers.includes(answer ?? "")
@@ -67,7 +66,6 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
                     messageCode: ErrorStat.RESPONSE.CODE
                 },
             }));
-            return;
         }
         else {
             this.setState((prevState) => ({
@@ -79,10 +77,18 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
             }));
             this.props.onSubmit?.(this.state);
         }
+        this.setState((prev)=>({
+            surveyFormProps: {
+                ...prev.surveyFormProps,
+                formData: {
+                    email:"", answer:"", remarks:"",
+                }
+            }
+        }));
     };
     
 
-    render() {
+    public render() {
         const { surveyFormProps } = this.state;
         // const { messageCode } = this.props;
 
@@ -126,7 +132,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
                     ></textarea>
                 </div>
                 {(surveyFormProps?.messageCode != 0) && <div className="text-red-500 mb-4 font-semibold">{surveyFormProps?.message}</div>}
-                <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md">
+                <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-lime-600 hover:scale-105">
                     Submit
                 </button>
             </form>

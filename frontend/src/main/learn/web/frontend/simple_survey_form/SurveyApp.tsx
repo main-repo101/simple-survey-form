@@ -103,16 +103,18 @@ class SurveyApp extends React.Component<{}, ISurveyAppState> {
     public render() {
 
         return (<>
-            {this.state.errorMessage
-                ? <div className={`text-[2rem] p-6 bg-red-500 text-white font-semibold`}>Connection Lost</div>
-                : <div className={`bg-lime-400 h-6`}></div>
-            }
-            <div className="min-h-screen flex flex-col lg:flex-row">
-                <div className="lg:w-1/2 p-4">
-                    <SurveyForm onSubmit={e => this.handleSubmit(e)} message={this.state.errorMessage || undefined} messageCode={this.state.surveyStatisticProps?.messageCode ?? 0} />
-                </div>
-                <div className="lg:w-1/2 p-4">
-                    <SurveyStatistic data={this.state.surveyStatisticProps?.data ?? {}} />
+            <div className="h-screen flex flex-col overflow-hidden">
+                {this.state.errorMessage
+                    ? <div className={`text-[2rem] p-6 bg-red-500 text-white font-semibold`}>Connection Lost</div>
+                    : <div className={`bg-lime-400 h-6`}></div>
+                }
+                <div className="h-3/4 flex flex-col lg:flex-row">
+                    <div className="lg:w-1/2 p-4">
+                        <SurveyForm onSubmit={e => this.handleSubmit(e)} message={this.state.errorMessage || undefined} messageCode={this.state.surveyStatisticProps?.messageCode ?? 0} />
+                    </div>
+                    <div className="lg:w-1/2 p-4">
+                        <SurveyStatistic chartType={"pie"} data={this.state.surveyStatisticProps?.data ?? {}} />
+                    </div>
                 </div>
             </div>
         </>);
