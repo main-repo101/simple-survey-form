@@ -14,10 +14,12 @@ export default defineConfig({
   envPrefix: 'LEARN_WEB_FRONTEND_',
   server: {
     port: PORT,
+    // host: "0.0.0.0",
     open: true,
   },
   preview: {
     port: 8001,
+    host: "0.0.0.0",
     open: true,
   },
   build: {

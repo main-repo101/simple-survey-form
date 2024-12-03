@@ -104,7 +104,7 @@ export default class SurveyService {
     }
 
 
-    public async getStatistics() {
+    public async getStatistics(): Promise<{[key:string]: number}> {
         try {
             let [rows] = await this.pool.query<MySQL.RowDataPacket[]>(
                 "SELECT answer, COUNT(*) as count FROM survey_responses GROUP BY answer"

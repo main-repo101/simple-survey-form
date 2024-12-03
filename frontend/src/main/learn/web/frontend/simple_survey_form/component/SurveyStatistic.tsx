@@ -5,6 +5,7 @@ import ChartType from "@learn/web/frontend/simple_survey_form/model/ChartType";
 import ISurveyStatisticProps from "@learn/web/frontend/simple_survey_form/model/ISurveyStatisticProps";
 import ChartDataLabels from "chartjs-plugin-datalabels";
 
+
 ChartJs.Chart.register(ChartDataLabels);
 
 class SurveyStatistic extends React.Component<ISurveyStatisticProps, {}> {
@@ -14,10 +15,12 @@ class SurveyStatistic extends React.Component<ISurveyStatisticProps, {}> {
   private chartRef: globalThis.Readonly<React.RefObject<HTMLCanvasElement>>
     = React.createRef<HTMLCanvasElement>();
 
+  private countParticipant: number;
   public constructor(
-    props: { chartType?: "pie", data?: undefined }
+    props: { indexAxis: 'x', isLegendDisplay: true, isPercentage: false, chartType?: "pie", data?: undefined }
   ) {
     super(props);
+    this.countParticipant = 0;
   }
 
   public componentDidMount() {
@@ -64,16 +67,34 @@ class SurveyStatistic extends React.Component<ISurveyStatisticProps, {}> {
 
     if (!ctx || !chartType) return null;
 
+
+    // let countParticipant: number = 0;
+    // for (const key in data) {
+    //   if (Object.prototype.hasOwnProperty.call(data, key)) {
+    //     const value: number = data[key];
+    //     countParticipant += value;
+    //     console.log(countParticipant);
+    //   }
+    // }
+
+    // const d = data??{};
+    // Object.entries(d).forEach(([key, value]) => {
+    //   console.log(`${key}: ${value}`);
+    //   countParticipant += value as number;
+    // });
+
     const config: ChartJs.ChartConfiguration<ChartType, number[], string> = {
       type: chartType,
       data: {
         labels: Object.keys(data ?? []),
         datasets: [
           {
+            indexAxis: this.props.indexAxis ?? 'x',
             data: Object.values(data ?? ""),
             backgroundColor: ["#36A2EB", "#FF6384", "#FFCE56"],
           },
         ],
+
       },
       options: {
         responsive: true, //REM: Makes the chart resize with its container
@@ -92,7 +113,7 @@ class SurveyStatistic extends React.Component<ISurveyStatisticProps, {}> {
             },
           },
           legend: {
-            display: true, //REM: Show/hide legend
+            display: this.props.isLegendDisplay, //REM: Show/hide legend
             position: 'top', //REM: Position: 'top', 'left', 'right', 'bottom'
             labels: {
               color: '#000000', //REM: Text color
@@ -100,10 +121,14 @@ class SurveyStatistic extends React.Component<ISurveyStatisticProps, {}> {
                 size: 14, //REM: Font size
               },
             },
+            title: {
+              display: true,
+              text: "DX - Dev Exp",
+            },
           },
           datalabels: {
-            backgroundColor: 'rgba(255,255,255,0.7)', //REM: Label background
-            borderRadius: 8, // Rounded corners for the label background
+            backgroundColor: 'rgba(255,255,255,0.7)',
+            borderRadius: 8, //REM: Rounded corners for the label background
             padding: {
               top: 5,
               bottom: 5,
@@ -111,15 +136,16 @@ class SurveyStatistic extends React.Component<ISurveyStatisticProps, {}> {
               right: 8,
             },
             font: {
-              size: 25, //REM: Font size
-              weight: 'bold', //REM: Font weight
+              size: 25,
+              weight: 'bold',
             },
             color: '#000', //REM: Set label color
-            formatter: (value: number) => value, //REM: Format value (e.g., show numbers)
+            formatter: (value: number) => this.props.isPercentage ? (((value / this.countParticipant) * 100).toFixed(2) + "%") : value,
             anchor: 'end',
             align: 'start',
             offset: 25,
           },
+
         },
       }
     };
@@ -129,14 +155,26 @@ class SurveyStatistic extends React.Component<ISurveyStatisticProps, {}> {
 
   public updateChart() {
     if (this.chartInstance) {
+      
+      const d = this.props.data ?? {};
+      this.countParticipant = 0;
+      Object.entries(d).forEach(([key, value]) => {
+        this.countParticipant += value as number;
+      });
+      
       this.chartInstance.data.labels = Object.keys(this.props.data ?? []);
-      this.chartInstance.data.datasets[0].data = Object.values(this.props.data ?? "");
+      this.chartInstance.data.datasets[0].data = Object.values(this.props.data ?? []);
       this.chartInstance.update();
     }
   }
 
   public render(): React.ReactElement {
-    return <canvas ref={this.chartRef} />;
+    return <>
+      <canvas ref={this.chartRef} />
+      {/* <div id={`pnl-population`}>
+          <h1>Participants: <span>{this.countParticipant}</span></h1>
+        </div> */}
+    </>;
   }
 }
 
