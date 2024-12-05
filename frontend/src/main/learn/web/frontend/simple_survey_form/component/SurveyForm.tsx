@@ -2,14 +2,15 @@ import * as React from "react";
 
 import ISurveyFormState from "@learn/web/frontend/simple_survey_form/model/ISurveyFormState";
 import ISurveyFormProps from "@learn/web/frontend/simple_survey_form/model/ISurveyFormProps";
-import ErrorStat from "../model/error/ErrorStat";
-
+import ErrorStat from "@learn/web/frontend/simple_survey_form//model/error/ErrorStat";
+import CheckboxSurvey from "./CheckboxSurvey";
+// import CheckboxSurvey from "./CheckboxSurvey";
 
 class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
     private validAnswers = ["Love Web Programming", "Like Web Programming", "Neutral"];
     public static defaultProps: ISurveyFormProps = {
-        formData: { email: "", answer: "", remarks: "" },
-        onSubmit: () => {},
+        formData: { email: "", answer: "", remarks: "", likedProgrammingLanguage: [] },
+        onSubmit: () => { },
         message: ErrorStat.NONE.DESCRIPTION,
         messageCode: ErrorStat.NONE.CODE
     }
@@ -44,10 +45,10 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
 
     public handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-    
+
         const { email, answer } = this.state.surveyFormProps?.formData ?? {};
-    
-        if( !(email && email.length > 0 ) ) {
+
+        if (!(email && email.length > 0)) {
             this.setState((prevState) => ({
                 surveyFormProps: {
                     ...prevState.surveyFormProps,
@@ -55,6 +56,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
                     messageCode: ErrorStat.EMAIL.CODE
                 },
             }));
+            return;
         }
         else if (
             !this.validAnswers.includes(answer ?? "")
@@ -66,6 +68,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
                     messageCode: ErrorStat.RESPONSE.CODE
                 },
             }));
+            return;
         }
         else {
             this.setState((prevState) => ({
@@ -77,16 +80,32 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
             }));
             this.props.onSubmit?.(this.state);
         }
-        this.setState((prev)=>({
+        this.setState((prev) => ({
             surveyFormProps: {
                 ...prev.surveyFormProps,
                 formData: {
-                    email:"", answer:"", remarks:"",
+                    email: "", answer: "", remarks: "",
+                    likedProgrammingLanguage: []
                 }
             }
         }));
     };
-    
+
+
+    handleCheckboxSelection = (selectedChoices: string[]) => {
+        this.setState((prev) => ({
+            ...prev,
+            surveyFormProps: {
+                ...prev.surveyFormProps,
+                formData: {
+                    email: prev.surveyFormProps?.formData?.email ?? "",
+                    answer: prev.surveyFormProps?.formData?.answer ?? "",
+                    remarks: prev.surveyFormProps?.formData?.remarks ?? "",
+                    likedProgrammingLanguage: selectedChoices,
+                }
+            }
+        }));
+    };
 
     public render() {
         const { surveyFormProps } = this.state;
@@ -100,8 +119,8 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
                         type="email"
                         name="email"
                         value={surveyFormProps?.formData?.email}
-                        onChange={e=>this.handleInputChange(e)}
-                        className={`border-2 rounded-md w-full p-2 ${( surveyFormProps?.messageCode === ErrorStat.EMAIL.CODE ) ? "border-orange-500" : "border-gray-300"}`}
+                        onChange={e => this.handleInputChange(e)}
+                        className={`border-2 rounded-md w-full p-2 ${(surveyFormProps?.messageCode === ErrorStat.EMAIL.CODE) ? "border-orange-500" : "border-gray-300"}`}
                         placeholder="Enter your email"
                     />
                 </div>
@@ -111,7 +130,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
                         name="answer"
                         value={surveyFormProps?.formData?.answer}
                         onChange={this.handleInputChange}
-                        className={`border-2 rounded-md w-full p-2 ${(surveyFormProps?.messageCode === ErrorStat.RESPONSE.CODE ) ? "border-orange-500" : "border-gray-300"}`}
+                        className={`border-2 rounded-md w-full p-2 ${(surveyFormProps?.messageCode === ErrorStat.RESPONSE.CODE) ? "border-orange-500" : "border-gray-300"}`}
                     >
                         <option value="">Select an answer</option>
                         {this.validAnswers.map((opt) => (
@@ -121,6 +140,11 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
                         ))}
                     </select>
                 </div>
+                {/* <CheckboxSurvey
+                    question="Which of these programming languages do you use?"
+                    choices={["JavaScript", "TypeScript", "Python", "Java", "C++", "Go", "Rust", "Others"]}
+                    onSelectionChange={this.handleCheckboxSelection}
+                /> */}
                 <div className="mb-4">
                     <label className="block font-bold mb-2">Remarks [OPTIONAL]</label>
                     <textarea

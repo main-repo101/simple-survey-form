@@ -215,7 +215,7 @@ class SurveyApp extends React.Component<{}, ISurveyAppState> {
                             </div>
                         </div>
                     </div>
-                    <div className="lg:w-1/2 p-4">
+                    <div className="lg:w-1/2 p-4 h-[45rem]">
                         <SurveyStatistic isPercentage={true} chartType={this.state.chartType} data={this.state.surveyStatisticProps?.data ?? {}} />
                     </div>
                 </div>
