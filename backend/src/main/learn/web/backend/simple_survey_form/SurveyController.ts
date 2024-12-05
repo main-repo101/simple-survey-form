@@ -26,4 +26,49 @@ export default class SurveyController {
             res.status(500).json({ error: "Internal server error." });
         }
     }
+
+    public async getHeader(req: Request, res: Response) {
+        try {
+            const STATS = await this.service.getHeader('survey_responses');
+            res.status(200).json(STATS);
+        } catch (error) {
+            res.status(500).json({ error: "Internal server error." });
+        }
+    }
+
+    public async getRecords(req: Request, res: Response) {
+        try {
+            const STATS = await this.service.getRecords('survey_responses');
+            res.status(200).json(STATS);
+        } catch (error) {
+            res.status(500).json({ error: "Internal server error." });
+        }
+    }
+    
+    public async getStatsVII(req: Request, res: Response) {
+        try {
+            const STATS = await this.service.getStatisticsVII('survey_responses_vii');
+            res.status(200).json(STATS);
+        } catch (error) {
+            res.status(500).json({ error: "Internal server error." });
+        }
+    }
+    
+    public async getHeaderVII(req: Request, res: Response) {
+        try {
+            const STATS = await this.service.getHeader('survey_responses_vii');
+            res.status(200).json(STATS);
+        } catch (error) {
+            res.status(500).json({ error: "Internal server error." });
+        }
+    }
+
+    public async getRecordsVII(req: Request, res: Response) {
+        try {
+            const STATS = await this.service.getRecords('survey_responses_vii');
+            res.status(200).json(STATS);
+        } catch (error) {
+            res.status(500).json({ error: "Internal server error." });
+        }
+    }
 }

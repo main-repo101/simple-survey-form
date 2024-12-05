@@ -34,6 +34,8 @@ APP.use(express.json());
 
 APP.post("/api/submit", surveyController.submitSurvey.bind(surveyController));
 APP.get("/api/stats", surveyController.getStats.bind(surveyController));
+APP.get("/api/records", surveyController.getRecords.bind(surveyController));
+APP.get("/api/header", surveyController.getHeader.bind(surveyController));
 
 APP.get("/", (req, res) => {
     res.status(200).json([

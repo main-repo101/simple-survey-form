@@ -2,11 +2,12 @@ import * as React from "react";
 
 // import SurveyForm from "@learn/web/frontend/simple_survey_form/component/view/SurveyForm";
 import SurveyStatistic from "@learn/web/frontend/simple_survey_form/component/SurveyStatistic";
-import SurveyStatisticII from "@learn/web/frontend/simple_survey_form/component/SurveyStatisticII";
+// import SurveyStatisticII from "@learn/web/frontend/simple_survey_form/component/SurveyStatisticII";
 import SurveyForm from "@learn/web/frontend/simple_survey_form/component/SurveyForm";
 import ISurveyAppState from "@learn/web/frontend/simple_survey_form/model/ISurveyAppState";
 import ISurveyFormState from "@learn/web/frontend/simple_survey_form/model/ISurveyFormState";
 import ErrorStat from "./model/error/ErrorStat";
+import SurveyRecord from "./component/SurveyRecord";
 
 
 class SurveyApp extends React.Component<{}, ISurveyAppState> {
@@ -49,6 +50,52 @@ class SurveyApp extends React.Component<{}, ISurveyAppState> {
         // if( prevState.chartType !== this.state.chartType ) {
         //     this.
         // }
+        if (prevState.surveyStatisticProps?.data !== this.state.surveyStatisticProps?.data) {
+            this.fetchRecord();
+        }
+    }
+
+    public fetchRecord = async () => {
+        try {
+            const RESPONSE = await fetch(`http://${SurveyApp.API_HOST}:${SurveyApp.API_PORT}/api/records`);
+            let result = await RESPONSE.json();
+
+            
+            const HEADER = await fetch(`http://${SurveyApp.API_HOST}:${SurveyApp.API_PORT}/api/header`);
+            let headerResult = await HEADER.json();
+
+            if (RESPONSE.status === 200) {
+                this.setState((prev)=>({
+                    errorMessage: result.error,
+                    surveyStatisticProps: {
+                        ...prev.surveyStatisticProps,
+                        messageCode: ErrorStat.PULL.CODE
+                    },
+                    surveyRecordProps: { headers: headerResult, records: result },
+                }));
+            } else {
+                this.setState((prev) => ({
+                    errorMessage: result.error,
+                    surveyStatisticProps: {
+                        ...prev.surveyStatisticProps,
+                        messageCode: ErrorStat.PULL.CODE
+                    },
+                    surveyRecordProps: prev.surveyRecordProps
+                }));
+            }
+        } catch (error) {
+            this.setState((prev) => ({
+                errorMessage: (error instanceof Error) ? error.message : String(error),
+                surveyStatisticProps: {
+                    ...prev.surveyStatisticProps,
+                    // message: this.state.errorMessage,
+                    message: (error instanceof Error) ? error.message : String(error),
+                    messageCode: ErrorStat.PULL.CODE
+                },
+                surveyRecordProps: prev.surveyRecordProps
+            }));
+            console.error("Error fetching statistics:", error);
+        }
     }
 
     public handleSubmit = async (surveyFormState: ISurveyFormState) => {
@@ -139,9 +186,9 @@ class SurveyApp extends React.Component<{}, ISurveyAppState> {
     // }
 
     public render() {
-        const COUNT_PARTICIPANT: number = Object.values(this.state.surveyStatisticProps?.data??[]).reduce( (sum, val) => sum + (val as number));
+        const COUNT_PARTICIPANT: number = Object.values(this.state.surveyStatisticProps?.data ?? []).reduce((sum, val) => sum + (val as number));
         return (<>
-            <div className="h-screen flex flex-col">
+            <div className=" flex flex-col">
                 {this.state.errorMessage
                     ? <div className={`text-[2rem] p-6 bg-red-500 text-white font-semibold`}>Connection Lost</div>
                     : <div className={`bg-lime-400 h-6`}></div>
@@ -155,7 +202,7 @@ class SurveyApp extends React.Component<{}, ISurveyAppState> {
                             <h1>
                                 Simple Survey Statistic ~ DX - Developer Experience, &nbsp;
                                 <span id={`pnl-population`} className={`text-lime-500 text-outline`}>
-                                    Participant(s): <span>{ COUNT_PARTICIPANT }</span>
+                                    Participant(s): <span>{COUNT_PARTICIPANT}</span>
                                 </span>
                             </h1>
                         </div>
@@ -172,6 +219,7 @@ class SurveyApp extends React.Component<{}, ISurveyAppState> {
                         <SurveyStatistic isPercentage={true} chartType={this.state.chartType} data={this.state.surveyStatisticProps?.data ?? {}} />
                     </div>
                 </div>
+                <SurveyRecord headers={this.state.surveyRecordProps?.headers??[]} records={this.state.surveyRecordProps?.records??[]}/>
             </div>
         </>);
     }
