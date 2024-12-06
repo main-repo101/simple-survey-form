@@ -4,6 +4,7 @@ import ISurveyFormState from "@learn/web/frontend/simple_survey_form/model/ISurv
 import ISurveyFormProps from "@learn/web/frontend/simple_survey_form/model/ISurveyFormProps";
 import ErrorStat from "@learn/web/frontend/simple_survey_form//model/error/ErrorStat";
 import CheckboxSurvey from "./CheckboxSurvey";
+import RadioboxSurvey from "./RadioboxSurvey";
 // import CheckboxSurvey from "./CheckboxSurvey";
 
 class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
@@ -140,11 +141,16 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
                         ))}
                     </select>
                 </div>
-                {/* <CheckboxSurvey
-                    question="Which of these programming languages do you use?"
+                <CheckboxSurvey
+                    question="Which of these programming languages do you like?"
                     choices={["JavaScript", "TypeScript", "Python", "Java", "C++", "Go", "Rust", "Others"]}
                     onSelectionChange={this.handleCheckboxSelection}
-                /> */}
+                />
+                <RadioboxSurvey 
+                question="What is your most favorite programming naming convention?"
+                choices={["PascalCase", "camelCase", "snake_case", "Fr33_dOm"]}
+                onSelectionChange={this.handleCheckboxSelection}
+                />
                 <div className="mb-4">
                     <label className="block font-bold mb-2">Remarks [OPTIONAL]</label>
                     <textarea
