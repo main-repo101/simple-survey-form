@@ -24,7 +24,7 @@ export default class SurveyService {
 
     //REM: Initialize the database with the schema
     private async initializeDatabase() {
-        const SCHEMA_PATH = path.resolve(__dirname, Path.DIR_PRIVATE_RESOURCE + "/db/init_schema_vii.sql");
+        const SCHEMA_PATH = path.resolve(__dirname, Path.DIR_PRIVATE_RESOURCE + "/db/init_schema.sql");
 
         //REM: Validate file existence
         if (!fs.existsSync(SCHEMA_PATH)) {
