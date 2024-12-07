@@ -15,6 +15,7 @@ Simple Survey form with basic "graphical-visual aid"..., for a very simple stati
   - [Running the Frontend](#running-the-frontend)
 - [How to Use the Web App](#how-to-use-the-web-app)
 - [Troubleshooting](#troubleshooting)
+- [What it looks like](#what-it-looks-like)
 <!-- - [License](#license) -->
 
 ## Prerequisites
