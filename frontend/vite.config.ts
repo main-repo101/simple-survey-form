@@ -5,7 +5,8 @@ import dotenv from 'dotenv'
 
 dotenv.config()
 
-const PORT = Number(process.env.LEARN_WEB_FRONTEND_PORT ?? 8009);
+const PORT: number = Number(process.env.LEARN_WEB_FRONTEND_PORT ?? 8009);
+// const API_HOST: string = process.env.LEARN_WEB_FRONTEND_API_HOST ?? "0.0.0.0";
 
 
 // https://vite.dev/config/
@@ -14,13 +15,19 @@ export default defineConfig({
   envPrefix: 'LEARN_WEB_FRONTEND_',
   server: {
     port: PORT,
-    // host: "0.0.0.0",
+    host: "0.0.0.0",
     open: true,
+    // proxy: {
+    //   "":""
+    // }
   },
   preview: {
     port: 8001,
-    host: "0.0.0.0",
-    open: true,
+    // host: "0.0.0.0",
+    open: true,    
+    // proxy: {
+    //   "":""
+    // }
   },
   build: {
     outDir: 'build',

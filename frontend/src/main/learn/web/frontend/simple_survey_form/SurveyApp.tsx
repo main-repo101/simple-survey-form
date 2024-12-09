@@ -13,7 +13,7 @@ import SurveyRecord from "./component/SurveyRecord";
 class SurveyApp extends React.Component<{}, ISurveyAppState> {
 
     public static readonly API_HOST: string = import.meta.env.LEARN_WEB_FRONTEND_API_HOST ?? "localhost";
-    public static readonly API_PORT: string = import.meta.env.LEARN_WEB_FRONTEND_API_PORT ?? "8009";
+    public static readonly API_PORT: string = import.meta.env.LEARN_WEB_FRONTEND_API_PORT ?? "8008";
     private intervalId: NodeJS.Timeout | null = null;
 
     public constructor(props: {}) {
