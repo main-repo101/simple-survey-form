@@ -22,7 +22,7 @@ const CheckboxSurvey: React.FC<CheckboxSurveyProps> = ({
             <label className="block font-bold mb-2">{question}</label>
             <div className="flex flex-row flex-wrap">
                 {choices.map((choice, index) => (
-                    <div className={`pr-[2rem]`}>
+                    <div key={index} className={`pr-[2rem]`}>
                         <label key={index} className="flex items-center space-x-2">
                             <input
                                 type="checkbox"

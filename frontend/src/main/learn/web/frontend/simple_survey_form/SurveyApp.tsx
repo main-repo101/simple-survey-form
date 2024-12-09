@@ -186,7 +186,7 @@ class SurveyApp extends React.Component<{}, ISurveyAppState> {
     // }
 
     public render() {
-        const COUNT_PARTICIPANT: number = Object.values(this.state.surveyStatisticProps?.data ?? []).reduce((sum, val) => sum + (val as number));
+        const COUNT_PARTICIPANT: number = Object.values(this.state.surveyStatisticProps?.data ?? []).reduce((sum, val) => sum + (val as number), 0);
         return (<>
             <div className=" flex flex-col">
                 {this.state.errorMessage
