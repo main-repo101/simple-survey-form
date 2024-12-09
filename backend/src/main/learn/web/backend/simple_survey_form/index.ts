@@ -18,6 +18,8 @@ const MY_SQL_POOL = MySQL.createPool({
     password: process.env.LEARN_WEB_BACKEND_DB_PASSWORD,
     database: process.env.LEARN_WEB_BACKEND_DB_NAME,
     multipleStatements: true,
+    timezone: 'Z',
+    dateStrings: true, 
 })
 
 //REM: Other attributes for MySQL2 pooling
