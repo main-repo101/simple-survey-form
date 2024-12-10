@@ -15,6 +15,7 @@ const CheckboxSurvey: React.FC<CheckboxSurveyProps> = ({
 
         setSelectedChoices([choice]);
         onSelectionChange([choice]);
+        
     };
 
     return (

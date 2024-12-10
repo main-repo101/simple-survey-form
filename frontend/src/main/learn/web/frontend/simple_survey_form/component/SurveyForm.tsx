@@ -90,6 +90,7 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
                 }
             }
         }));
+        // this.handleCheckboxSelection([""]);
     };
 
 
@@ -108,8 +109,11 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
         }));
     };
 
+
+
     public render() {
         const { surveyFormProps } = this.state;
+        const ERROR_CODE = this.props.messageCode ?? ErrorStat.NONE.CODE;
         // const { messageCode } = this.props;
 
         return (
@@ -146,10 +150,10 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
                     choices={["JavaScript", "TypeScript", "Python", "Java", "C++", "Go", "Rust", "Others"]}
                     onSelectionChange={this.handleCheckboxSelection}
                 />
-                <RadioboxSurvey 
-                question="What is your most favorite programming naming convention?"
-                choices={["PascalCase", "camelCase", "snake_case", "Fr33_dOm"]}
-                onSelectionChange={this.handleCheckboxSelection}
+                <RadioboxSurvey
+                    question="What is your most favorite programming naming convention?"
+                    choices={["PascalCase", "camelCase", "snake_case", "Fr33_dOm"]}
+                    onSelectionChange={this.handleCheckboxSelection}
                 />
                 <div className="mb-4">
                     <label className="block font-bold mb-2">Remarks [OPTIONAL]</label>
@@ -162,7 +166,21 @@ class SurveyForm extends React.Component<ISurveyFormProps, ISurveyFormState> {
                     ></textarea>
                 </div>
                 {(surveyFormProps?.messageCode != 0) && <div className="text-red-500 mb-4 font-semibold">{surveyFormProps?.message}</div>}
-                <button type="submit" className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-lime-600 hover:scale-105">
+                {/* <button
+                    type="submit"
+                    className={`bg-blue-500 text-white py-2 px-4 rounded-md 
+                     hover:bg-lime-600 hover:scale-105 
+                    ${ERROR_CODE !== ErrorStat.NONE.CODE ? 'disabled:bg-gray-300 disabled:cursor-not-allowed' : ''}`}
+                    disabled={ERROR_CODE !== ErrorStat.NONE.CODE}
+                >
+                    Submit
+                </button> */}
+                <button
+                    type="submit"
+                    className={`bg-blue-500 text-white py-2 px-4 rounded-md 
+                     hover:bg-lime-600 hover:scale-105 
+                    }`}
+                >
                     Submit
                 </button>
             </form>

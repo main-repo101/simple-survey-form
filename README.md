@@ -1,7 +1,9 @@
 
 
 # Simple Survey form  
-Simple Survey form with basic "graphical-visual aid"..., for a very simple statistical... analysis. 
+A basic survey form with simple "graphical visual aids" designed for straightforward very simple statistical analysis.
+
+`Note:` Currently, it supports only one functional question; the rest are placeholders or mock-ups.
 
 ## Table of Contents
 - [Prerequisites](#prerequisites)
@@ -85,6 +87,9 @@ Dependencies Installation
 ### How to Use the Web App 
 (From the end user's perspective)
 * The web app is intuitive and easy to use.
+* Login credential (simple-admin-test):
+    - Username: `admin123`
+    - Password: `test_password_123`
 
 ### Troubleshooting
 * Database Connection Issues
@@ -100,12 +105,24 @@ Dependencies Installation
 
 
 ## What it looks like
-#### Home Page [Active]
-![Home Active](./frontend/docs/img/home-active-002.png)
+#### Survey Form Page [Active]
+![survey-form-page](./frontend/docs/img/survey-form-000a.png)
 
-#### Home Page [Inactive]
-![Home Inctive](./frontend/docs/img/home-inactive-002.png)
+#### Survey Form Page [Inactive]
+![survey-form-page](./frontend/docs/img/survey-form-connection-lost-000a.png)
 
 
-#### Home Page [Records]
-![Home Records](./frontend/docs/img/home-asap-records-002.png)
+#### Login Page
+![login-page](./frontend/docs/img/login-page-000b.png)
+
+
+#### Admin Content Page #01 [Active]
+![admin-content-page-01](./frontend/docs/img/admin-content-page-000a.png)
+
+
+#### Admin Content Page #02 [Active]
+![admin-content-page-02](./frontend/docs/img/admin-content-page-001a.png)
+
+
+#### Admin Content Page [Inactive]
+![admin-content-page](./frontend/docs/img/admin-content-page-connection-lost-000a.png) 

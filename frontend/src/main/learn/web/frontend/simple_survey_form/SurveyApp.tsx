@@ -8,15 +8,27 @@ import ISurveyAppState from "@learn/web/frontend/simple_survey_form/model/ISurve
 import ISurveyFormState from "@learn/web/frontend/simple_survey_form/model/ISurveyFormState";
 import ErrorStat from "./model/error/ErrorStat";
 import SurveyRecord from "./component/SurveyRecord";
+import { NavLink } from "react-router-dom";
 
+export interface SurveyAppProps {
+    showRecords: boolean,
+    showStats: boolean,
+    showSurveyForm: boolean,
+}
 
-class SurveyApp extends React.Component<{}, ISurveyAppState> {
+class SurveyApp extends React.Component<SurveyAppProps, ISurveyAppState> {
 
     public static readonly API_HOST: string = import.meta.env.LEARN_WEB_FRONTEND_API_HOST ?? "localhost";
     public static readonly API_PORT: string = import.meta.env.LEARN_WEB_FRONTEND_API_PORT ?? "8008";
     private intervalId: NodeJS.Timeout | null = null;
 
-    public constructor(props: {}) {
+    public static defaultProps: SurveyAppProps = {
+        showRecords: false,
+        showStats: false,
+        showSurveyForm: true,
+    }
+
+    public constructor(props: SurveyAppProps) {
         super(props);
         this.state = {
             surveyStatisticProps: { data: { "Love Web Programming": 0, "Like Web Programming": 0, "Neutral": 0 } },
@@ -60,12 +72,12 @@ class SurveyApp extends React.Component<{}, ISurveyAppState> {
             const RESPONSE = await fetch(`http://${SurveyApp.API_HOST}:${SurveyApp.API_PORT}/api/records`);
             let result = await RESPONSE.json();
 
-            
+
             const HEADER = await fetch(`http://${SurveyApp.API_HOST}:${SurveyApp.API_PORT}/api/header`);
             let headerResult = await HEADER.json();
 
             if (RESPONSE.status === 200) {
-                this.setState((prev)=>({
+                this.setState((prev) => ({
                     errorMessage: result.error,
                     surveyStatisticProps: {
                         ...prev.surveyStatisticProps,
@@ -116,6 +128,7 @@ class SurveyApp extends React.Component<{}, ISurveyAppState> {
                     surveyFormState.surveyFormProps.messageCode = ErrorStat.PUSH.CODE;
             } else {
                 this.fetchStatistics();
+
                 // this.setState((prevState) => { 
                 //     return {
                 //         errorMessage: null,
@@ -140,7 +153,9 @@ class SurveyApp extends React.Component<{}, ISurveyAppState> {
         }
     };
 
-    private async fetchStatistics() {
+    private async fetchStatistics(): Promise<void> {
+
+        // if( !this.props.showRecords && !this.props.showStats ) return;
         try {
             const RESPONSE = await fetch(`http://${SurveyApp.API_HOST}:${SurveyApp.API_PORT}/api/stats`);
             let result = await RESPONSE.json();
@@ -193,33 +208,49 @@ class SurveyApp extends React.Component<{}, ISurveyAppState> {
                     ? <div className={`text-[2rem] p-6 bg-red-500 text-white font-semibold`}>Connection Lost</div>
                     : <div className={`bg-lime-400 h-6`}></div>
                 }
-                <div className="h-3/4 flex flex-col gap-10 lg:gap-0 lg:flex-row">
+                <div className="h-3/4 flex flex-col gap-10 lg:gap-0 lg:flex-row w-full justify-center">
                     {/* <button className="" onClick={e=>this.handleChart(e)}>
                         click me to become a BAR
                     </button> */}
                     <div id="pnl-form" className={`flex flex-col lg:w-1/2 p-4`}>
+                        {this.props.showSurveyForm &&
+                            <NavLink
+                                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+                                to={`/login`}>
+                                View Stats
+                            </NavLink>
+                        }
                         <div className="title font-bold text-orange-500 text-[2rem]">
                             <h1>
-                                Simple Survey Statistic ~ DX - Developer Experience, &nbsp;
-                                <span id={`pnl-population`} className={`text-lime-500 text-outline`}>
+                                Simple Survey Statistic ~ DX - Developer Experience. &nbsp;
+                                {this.props.showStats && <span id={`pnl-population`} className={`text-lime-500 text-outline`}>
                                     Participant(s): <span>{COUNT_PARTICIPANT}</span>
                                 </span>
+                                }
                             </h1>
                         </div>
                         <div className={`flex flex-col gap-10`}>
-                            <div className="">
-                                <SurveyForm onSubmit={e => this.handleSubmit(e)} message={this.state.errorMessage || undefined} messageCode={this.state.surveyStatisticProps?.messageCode ?? 0} />
-                            </div>
-                            <div className="">
-                                <SurveyStatistic indexAxis={'y'} isLegendDisplay={false} chartType={"bar"} data={this.state.surveyStatisticProps?.data ?? {}} />
-                            </div>
+                            {this.props.showSurveyForm &&
+                                <div className="">
+                                    <SurveyForm onSubmit={e => this.handleSubmit(e)} message={this.state.errorMessage || undefined} messageCode={this.state.surveyStatisticProps?.messageCode ?? 0} />
+                                </div>
+                            }
+                            {this.props.showStats &&
+                                <div className="">
+                                    <SurveyStatistic indexAxis={'y'} isLegendDisplay={false} chartType={"bar"} data={this.state.surveyStatisticProps?.data ?? {}} />
+                                </div>
+                            }
                         </div>
                     </div>
-                    <div className="lg:w-1/2 p-4 h-[45rem]">
-                        <SurveyStatistic isPercentage={true} chartType={this.state.chartType} data={this.state.surveyStatisticProps?.data ?? {}} />
-                    </div>
+                    {this.props.showStats &&
+                        <div className="lg:w-1/2 p-4 h-[45rem]">
+                            <SurveyStatistic isPercentage={true} chartType={this.state.chartType} data={this.state.surveyStatisticProps?.data ?? {}} />
+                        </div>
+                    }
                 </div>
-                <SurveyRecord headers={this.state.surveyRecordProps?.headers??[]} records={this.state.surveyRecordProps?.records??[]}/>
+                {this.props.showRecords &&
+                    <SurveyRecord headers={this.state.surveyRecordProps?.headers ?? []} records={this.state.surveyRecordProps?.records ?? []} />
+                }
             </div>
         </>);
     }
