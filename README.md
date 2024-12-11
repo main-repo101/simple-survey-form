@@ -28,16 +28,17 @@ A basic survey form with simple "graphical visual aids" designed for straightfor
 ## Setting Up XAMPP or LAMPP
 1. Open XAMPP or LAMPP control panel.
 2. Start the **MySQL** module service.
+3. Start the **Apache/Server** module service.
 3. Verify that the database service is running:
-   - Access **phpMyAdmin**.
-   - Create or check the database as specified in the `backend/.env` file.
-
+   - Open **phpMyAdmin** or use the command-line interface with **mysql**.
+   - Create or check the database as specified in the `backend/.env` file, such as the database named **simple_survey_form_db** in this instance.
+   
 ## Backend Setup
 
 ### Database Configuration
 1. Navigate to the backend folder:
    ```bash
-   cd backend
+   /simple-survey-form> cd backend
    ```
 2. Open the .env file located in the backend directory.
 3. Update the database credentials as per your MySQL setup:
@@ -53,14 +54,14 @@ A basic survey form with simple "graphical visual aids" designed for straightfor
 ### Dependencies Installation
 * Run the following command to install required backend dependencies:
     ```bash
-    npm install
+    /simple-survey-form/backend> npm install
     ```
 * Note: This is required during the initial setup or when updating dependencies.
 
 ### Starting the Backend
 * Start the backend server:
     ```bash
-    npm start
+    /simple-survey-form/backend> npm start
     ```
 * The backend server will listen on the port configured in the .env file (default: 8008 or as specified).
 
@@ -69,18 +70,24 @@ A basic survey form with simple "graphical visual aids" designed for straightfor
 Dependencies Installation
 1. Navigate to the frontend folder
     ```bash
-    cd frontend
+    /simple-survey-form> cd frontend
     ```
-2. Install the frontend dependencies
+2. Modify the `.env` file to configure API_HOST for enabling access across multiple units:
+    ```env
+    LEARN_WEB_FRONTEND_API_HOST='<numerical-ip-address>'
+    ```
+    e.q: `LEARN_WEB_FRONTEND_API_HOST='192.168.xxx.xxx`
+3. Install the frontend dependencies
     ```bash
-    npm install
+    /simple-survey-form/frontend> npm install
     ```
     * Note: This is required during the initial setup or when updating dependencies.
+
 
 ### Running the Frontend
 * Start the development server:
     ```bash
-    npm run dev
+    /simple-survey-form/frontend> npm run dev
     ```
 * The frontend development server will start and should be accessible at http://localhost:3000 (or the configured port).
 

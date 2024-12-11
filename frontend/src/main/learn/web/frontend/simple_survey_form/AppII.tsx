@@ -18,7 +18,7 @@ const AppII: React.FC = () => {
                     <ReactRouterDom.Route
                         path="/admin/dashboard"
                         element={
-                            <ProtectedRoute requiredRole="user">
+                            <ProtectedRoute requiredRole="admin">
                                 <AdminSimpleContentPage />
                             </ProtectedRoute>
                         }
